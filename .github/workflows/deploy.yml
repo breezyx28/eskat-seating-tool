@@ -1,0 +1,114 @@
+name: Deploy to eskat.kat-jr.com
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  NODE_ENV: production
+  DEPLOY_PATH: /var/www/html/eskat
+  DEPLOY_HOST: eskat.kat-jr.com
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type-check
+        run: bun x tsc --noEmit -p tsconfig.app.json
+
+      - name: Build production bundle
+        run: bun run build
+
+      - name: Verify build output
+        run: |
+          test -d dist || (echo "dist/ directory not found" && exit 1)
+          test -f dist/index.html || (echo "dist/index.html not found" && exit 1)
+          echo "Build output:"
+          ls -lah dist/
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Fetch host key at deploy time instead of pinning a SSH_KNOWN_HOSTS secret
+          ssh-keyscan -t ed25519,rsa,ecdsa "${DEPLOY_HOST}" > ~/.ssh/known_hosts 2>/dev/null
+          chmod 644 ~/.ssh/known_hosts
+
+          # Sanity check — fail early if the key couldn't be fetched
+          test -s ~/.ssh/known_hosts || (echo "ssh-keyscan returned no keys for ${DEPLOY_HOST}" && exit 1)
+
+      - name: Deploy dist/ to /var/www/html/eskat
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          REMOTE="${SSH_USER}@${DEPLOY_HOST}"
+          SSH_OPTS="-i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts"
+
+          echo "Ensuring ${DEPLOY_PATH} exists on server..."
+          ssh ${SSH_OPTS} "${REMOTE}" "mkdir -p ${DEPLOY_PATH}"
+
+          echo "Syncing dist/ -> ${DEPLOY_PATH}/ ..."
+          # Trailing slash on dist/ copies the CONTENTS (not the folder itself)
+          # --delete removes stale files from previous builds
+          rsync -az --delete \
+            --exclude='.git' \
+            --exclude='.well-known' \
+            -e "ssh ${SSH_OPTS}" \
+            dist/ \
+            "${REMOTE}:${DEPLOY_PATH}/"
+
+          echo "Verifying deployment..."
+          ssh ${SSH_OPTS} "${REMOTE}" "test -f ${DEPLOY_PATH}/index.html && ls -lah ${DEPLOY_PATH}"
+
+          echo "Deployed commit ${GITHUB_SHA::7} to ${DEPLOY_PATH}"
+
+      - name: Reload nginx (optional)
+        if: ${{ env.RELOAD_NGINX != 'false' }}
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+        continue-on-error: true
+        run: |
+          SSH_OPTS="-i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts"
+          ssh ${SSH_OPTS} "${SSH_USER}@${DEPLOY_HOST}" "sudo -n systemctl reload nginx || true"
+
+      - name: Smoke-test deployed site
+        run: |
+          echo "Waiting for site to respond..."
+          for i in 1 2 3 4 5; do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${DEPLOY_HOST}/" || echo "000")
+            echo "Attempt ${i}: HTTP ${CODE}"
+            if [ "${CODE}" = "200" ]; then
+              echo "Site is live."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Warning: smoke test did not return 200 within 5 attempts."
+          exit 1
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
