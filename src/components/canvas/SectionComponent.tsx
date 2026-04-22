@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { nanoid } from 'nanoid';
 import type { Section } from '@/types';
 import { SeatComponent } from './Seat';
 import { SectionContextMenu } from './SectionContextMenu';
@@ -31,6 +32,7 @@ export function SectionComponent({ section, onGenerateSeats, onRename }: Section
   const drillInto = useCanvasStore((s) => s.drillInto);
   const clearSectionSeats = useCanvasStore((s) => s.clearSectionSeats);
   const canvasLocked = useCanvasStore((s) => s.canvasLocked);
+  const addSection = useCanvasStore((s) => s.addSection);
 
   const { snapPoint } = useSnapToGrid();
   const isSelected = selectedIds.includes(section.id);
@@ -79,6 +81,67 @@ export function SectionComponent({ section, onGenerateSeats, onRename }: Section
       // When locked, allow selection (so the quick-actions menu stays usable)
       // but do NOT start a drag.
       if (locked) return;
+
+      // Alt+drag: clone each selected section in place, then drive the drag
+      // against the clones so the originals stay put. New ids are generated
+      // for the section and any nested seats/children to avoid collisions.
+      if (e.altKey) {
+        const data = useCanvasStore.getState().venueData;
+        const originalIds = selection.filter((id) =>
+          data.sections.some((s) => s.id === id)
+        );
+        const toClone = originalIds.length ? originalIds : [section.id];
+        const cloneIds: string[] = [];
+        const anchors = new Map<string, { x: number; y: number }>();
+        for (const id of toClone) {
+          const src = data.sections.find((s) => s.id === id);
+          if (!src) continue;
+          const clone = deepCloneSectionWithNewIds(src);
+          addSection(clone);
+          cloneIds.push(clone.id);
+          anchors.set(clone.id, { x: clone.bounds.x, y: clone.bounds.y });
+        }
+        if (cloneIds.length) {
+          setSelectedIds(cloneIds);
+          isDraggingRef.current = false;
+          dragStart.current = {
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+            anchors,
+          };
+          const onMoveAlt = (me: MouseEvent) => {
+            if (!dragStart.current) return;
+            const currentZoom = useCanvasStore.getState().zoom;
+            const dx = (me.clientX - dragStart.current.mouseX) / currentZoom;
+            const dy = (me.clientY - dragStart.current.mouseY) / currentZoom;
+            if (!isDraggingRef.current && (Math.abs(dx) > 2 || Math.abs(dy) > 2)) {
+              isDraggingRef.current = true;
+              setIsDragging(true);
+            }
+            if (!isDraggingRef.current) return;
+            const d = useCanvasStore.getState().venueData;
+            for (const [id, anchor] of dragStart.current.anchors) {
+              const sec = d.sections.find((s) => s.id === id);
+              if (!sec) continue;
+              const snapped = snapPoint(anchor.x + dx, anchor.y + dy);
+              updateSectionNoHistory(id, {
+                bounds: { ...sec.bounds, x: snapped.x, y: snapped.y },
+              });
+            }
+          };
+          const onUpAlt = () => {
+            commitHistory();
+            dragStart.current = null;
+            isDraggingRef.current = false;
+            setIsDragging(false);
+            window.removeEventListener('mousemove', onMoveAlt);
+            window.removeEventListener('mouseup', onUpAlt);
+          };
+          window.addEventListener('mousemove', onMoveAlt);
+          window.addEventListener('mouseup', onUpAlt);
+          return;
+        }
+      }
 
       const data = useCanvasStore.getState().venueData;
       const selectedSectionIds = selection.filter((id) =>
@@ -136,7 +199,7 @@ export function SectionComponent({ section, onGenerateSeats, onRename }: Section
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onUp);
     },
-    [section.id, section.bounds.x, section.bounds.y, setSelectedIds, addToSelection, removeFromSelection, snapPoint, updateSectionNoHistory, commitHistory]
+    [section.id, section.bounds.x, section.bounds.y, setSelectedIds, addToSelection, removeFromSelection, snapPoint, updateSectionNoHistory, commitHistory, addSection]
   );
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
@@ -373,4 +436,16 @@ export function SectionComponent({ section, onGenerateSeats, onRename }: Section
       />
     </>
   );
+}
+
+function deepCloneSectionWithNewIds(src: Section): Section {
+  const clone: Section = {
+    ...src,
+    id: nanoid(),
+    seats: src.seats.map((seat) => ({ ...seat, id: nanoid() })),
+  };
+  if (src.children && src.children.length) {
+    clone.children = src.children.map((c) => deepCloneSectionWithNewIds(c));
+  }
+  return clone;
 }

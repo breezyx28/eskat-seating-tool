@@ -1,7 +1,12 @@
 import { useCanvasStore } from '@/store/canvasStore';
-import { CircleNotch, Check } from '@phosphor-icons/react';
+import { CircleNotch, Check, Question } from '@phosphor-icons/react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-export function StatusBar() {
+interface StatusBarProps {
+  onShowHelp?: () => void;
+}
+
+export function StatusBar({ onShowHelp }: StatusBarProps = {}) {
   const cursorPosition = useCanvasStore((s) => s.cursorPosition);
   const selectedIds = useCanvasStore((s) => s.selectedIds);
   const zoom = useCanvasStore((s) => s.zoom);
@@ -102,6 +107,26 @@ export function StatusBar() {
             {Math.round(zoom * 100)}%
           </span>
         </div>
+
+        {onShowHelp && (
+          <>
+            <div className="hairline--vertical" style={{ height: 12 }} />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={onShowHelp}
+                  aria-label="Show keyboard shortcuts"
+                  className="flex items-center justify-center h-5 w-5 rounded-sm transition-colors duration-base ease-soft-spring hover:bg-[var(--bg-panel-hover)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  <Question size={12} weight="bold" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Shortcuts (Shift+?)</TooltipContent>
+            </Tooltip>
+          </>
+        )}
       </div>
     </footer>
   );

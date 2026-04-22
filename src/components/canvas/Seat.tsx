@@ -3,6 +3,25 @@ import type { Seat as SeatType, SeatIcon, CustomSeatIcon, Section } from '@/type
 import { ChairIcon, ChairSimpleIcon, WheelchairIcon } from '@/assets/icons/ChairIcon';
 import { useCanvasStore } from '@/store/canvasStore';
 
+/**
+ * Paints a dashed accent outline on every seat that shares `rowLabel` with
+ * the hovered seat inside the same section. DOM-first so the 18k-seat
+ * templates don't pay a React re-render tax on every hover move.
+ */
+function highlightRow(sectionId: string, rowLabel: string, on: boolean) {
+  if (!rowLabel) return;
+  const escSection = (window.CSS?.escape ?? ((v: string) => v))(sectionId);
+  const escRow = (window.CSS?.escape ?? ((v: string) => v))(rowLabel);
+  const nodes = document.querySelectorAll<HTMLElement>(
+    `[data-section-id="${escSection}"][data-row-label="${escRow}"]`
+  );
+  if (on) {
+    nodes.forEach((n) => n.setAttribute('data-row-hover', 'true'));
+  } else {
+    nodes.forEach((n) => n.removeAttribute('data-row-hover'));
+  }
+}
+
 /** Walks the section tree to locate the section that owns the given seat id. */
 function findSeatSection(sections: Section[], seatId: string): Section | null {
   for (const sec of sections) {
@@ -73,7 +92,24 @@ export const SeatComponent = React.memo(function SeatComponent({
     e.stopPropagation();
   }, []);
 
+  const handleMouseEnter = useCallback(() => {
+    if (seat.rowLabel) highlightRow(sectionId, seat.rowLabel, true);
+  }, [sectionId, seat.rowLabel]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (seat.rowLabel) highlightRow(sectionId, seat.rowLabel, false);
+  }, [sectionId, seat.rowLabel]);
+
   const size = Math.min(seat.bounds.width, seat.bounds.height);
+
+  const tooltip = [
+    `${seat.label} — ${seat.state}`,
+    seat.accessible ? 'accessible' : null,
+    seat.rowLabel ? 'Alt+Click: select row' : null,
+    'Shift/Ctrl+Click: add',
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <div
@@ -89,9 +125,13 @@ export const SeatComponent = React.memo(function SeatComponent({
       }}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
-      title={`${seat.label} — ${seat.state}${seat.accessible ? ' — accessible' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      title={tooltip}
       data-seat-id={seat.id}
       data-section-id={sectionId}
+      data-row-label={seat.rowLabel ?? ''}
+      data-selected={isSelected ? 'true' : undefined}
     >
       {isSelected && (
         <div

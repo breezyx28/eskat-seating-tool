@@ -4,6 +4,7 @@ import { Hero } from '@/components/landing/Hero';
 import { StatsStrip } from '@/components/landing/StatsStrip';
 import { FeatureBento } from '@/components/landing/FeatureBento';
 import { OutputShowcase } from '@/components/landing/OutputShowcase';
+import { TemplateDemo } from '@/components/landing/TemplateDemo';
 import { ExportCallout } from '@/components/landing/ExportCallout';
 import { ShortcutGrid } from '@/components/landing/ShortcutGrid';
 import { PlaygroundCTA } from '@/components/landing/PlaygroundCTA';
@@ -67,6 +68,7 @@ export default function Landing() {
         <StatsStrip />
         <FeatureBento />
         <OutputShowcase />
+        <TemplateDemo />
         <ExportCallout />
         <ShortcutGrid />
         <PlaygroundCTA />

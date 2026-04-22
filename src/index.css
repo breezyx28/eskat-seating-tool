@@ -227,6 +227,18 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   Canvas seat hover-row preview
+   Painted via data-row-hover attribute toggled from Seat.tsx on mouseenter.
+   DOM-only so 18k-seat templates avoid a React re-render on every hover.
+   -------------------------------------------------------------------------- */
+
+[data-seat-id][data-row-hover='true']:not([data-selected='true']) {
+  outline: 1.5px dashed var(--accent-border);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
    Accessible motion
    -------------------------------------------------------------------------- */
 

@@ -42,6 +42,7 @@ export function CanvasLayer({
   const drillPath = useCanvasStore((s) => s.drillPath);
   const canvasLocked = useCanvasStore((s) => s.canvasLocked);
   const selectedIds = useCanvasStore((s) => s.selectedIds);
+  const activeTool = useCanvasStore((s) => s.activeTool);
   const visibleSections = useMemo(
     () => getVisibleSections(venueData, drillPath),
     [venueData, drillPath]
@@ -150,6 +151,10 @@ export function CanvasLayer({
         return;
       }
 
+      // Hand tool: let the underlying TransformWrapper consume the drag to pan
+      // rather than starting a marquee selection.
+      if (activeTool === 'hand') return;
+
       if (canvasLocked) return;
 
       if (!e.shiftKey) clearSelection();
@@ -231,7 +236,7 @@ export function CanvasLayer({
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onUp);
     },
-    [clearSelection, setSelectedIds, zoom, polygonActive, canvasLocked]
+    [clearSelection, setSelectedIds, zoom, polygonActive, canvasLocked, activeTool]
   );
 
   const handleMouseMove = useCallback(

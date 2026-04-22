@@ -9,6 +9,8 @@ import {
   FilePlus,
   Lock,
   LockOpen,
+  ArrowsOutCardinal,
+  CursorClick,
 } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import { useCanvasStore } from '@/store/canvasStore';
@@ -91,6 +93,8 @@ export function Toolbar({ onNew, onOpen, onSave, onExportComponent }: ToolbarPro
   const historyIndex = useCanvasStore((s) => s.historyIndex);
   const history = useCanvasStore((s) => s.history);
   const venueName = useCanvasStore((s) => s.venueData.venue.name);
+  const activeTool = useCanvasStore((s) => s.activeTool);
+  const setActiveTool = useCanvasStore((s) => s.setActiveTool);
 
   const canUndo = historyIndex > 0;
   const canRedo = historyIndex < history.length - 1;
@@ -123,6 +127,56 @@ export function Toolbar({ onNew, onOpen, onSave, onExportComponent }: ToolbarPro
         </TooltipTrigger>
         <TooltipContent>Back to home</TooltipContent>
       </Tooltip>
+
+      <ToolbarDivider />
+
+      {/* Tool select: select (V) / hand (H) — mirrors Figma's single-key
+          tool toggles and drives whether left-drag on empty canvas starts a
+          marquee or pans the viewport. */}
+      <div
+        className="flex items-center rounded-sm overflow-hidden"
+        style={{ border: '1px solid var(--border)' }}
+      >
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => setActiveTool('select')}
+              aria-pressed={activeTool === 'select'}
+              className="flex items-center justify-center h-7 w-7 transition-colors duration-base ease-soft-spring focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              style={{
+                background:
+                  activeTool === 'select' ? 'var(--accent-soft)' : 'transparent',
+                color:
+                  activeTool === 'select' ? 'var(--accent)' : 'var(--text-muted)',
+              }}
+            >
+              <CursorClick size={14} weight={activeTool === 'select' ? 'fill' : 'regular'} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Select tool (V)</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => setActiveTool('hand')}
+              aria-pressed={activeTool === 'hand'}
+              className="flex items-center justify-center h-7 w-7 transition-colors duration-base ease-soft-spring focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              style={{
+                background:
+                  activeTool === 'hand' ? 'var(--accent-soft)' : 'transparent',
+                color:
+                  activeTool === 'hand' ? 'var(--accent)' : 'var(--text-muted)',
+                borderLeft: '1px solid var(--border)',
+              }}
+            >
+              <ArrowsOutCardinal size={14} weight={activeTool === 'hand' ? 'fill' : 'regular'} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Hand tool (H)</TooltipContent>
+        </Tooltip>
+      </div>
 
       <ToolbarDivider />
 

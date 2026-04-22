@@ -1,10 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   TransformWrapper,
   TransformComponent,
   type ReactZoomPanPinchRef,
 } from 'react-zoom-pan-pinch';
-import { useCanvasStore } from '@/store/canvasStore';
+import { useCanvasStore, setTransformRef } from '@/store/canvasStore';
 import { CanvasLayer } from './CanvasLayer';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import type { Point } from '@/types';
@@ -33,9 +33,16 @@ export function CanvasViewport({
   const setCursorPosition = useCanvasStore((s) => s.setCursorPosition);
   const venueData = useCanvasStore((s) => s.venueData);
   const canvasLocked = useCanvasStore((s) => s.canvasLocked);
+  const activeTool = useCanvasStore((s) => s.activeTool);
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+  const [panning, setPanning] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setTransformRef(transformRef.current);
+    return () => setTransformRef(null);
+  }, []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -98,22 +105,43 @@ export function CanvasViewport({
         </>
       )}
       <TransformWrapper
-        ref={transformRef}
+        ref={(ref) => {
+          transformRef.current = ref;
+          setTransformRef(ref);
+        }}
         initialScale={1}
         minScale={0.1}
         maxScale={5}
-        panning={{ activationKeys: [' '], velocityDisabled: true, disabled: canvasLocked }}
+        panning={{
+          activationKeys: [' '],
+          velocityDisabled: true,
+          disabled: canvasLocked,
+          allowLeftClickPan: activeTool === 'hand',
+          allowMiddleClickPan: true,
+          allowRightClickPan: false,
+        }}
         wheel={{ step: 0.08, disabled: canvasLocked }}
         pinch={{ disabled: canvasLocked }}
         doubleClick={{ disabled: true }}
         limitToBounds={false}
+        onPanningStart={() => setPanning(true)}
+        onPanningStop={() => setPanning(false)}
         onTransform={(ref) => {
           setZoom(ref.state.scale);
           setPanOffset({ x: ref.state.positionX, y: ref.state.positionY });
         }}
       >
         <TransformComponent
-          wrapperStyle={{ width: '100%', height: '100%' }}
+          wrapperStyle={{
+            width: '100%',
+            height: '100%',
+            cursor:
+              activeTool === 'hand'
+                ? panning
+                  ? 'grabbing'
+                  : 'grab'
+                : undefined,
+          }}
           contentStyle={{
             width: `${venueData.venue.width}px`,
             height: `${venueData.venue.height}px`,

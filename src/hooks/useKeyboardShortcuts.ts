@@ -14,6 +14,27 @@ export interface ShortcutHandlers {
   onToggleLock?: () => void;
   onScaleUp?: () => void;
   onScaleDown?: () => void;
+  onCopy?: () => void;
+  onCut?: () => void;
+  onPaste?: () => void;
+  onNudge?: (dx: number, dy: number) => void;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onZoomFit?: () => void;
+  onZoomActual?: () => void;
+  onSendBackward?: () => void;
+  onBringForward?: () => void;
+  onSendToBack?: () => void;
+  onBringToFront?: () => void;
+  onRename?: () => void;
+  onGroup?: () => void;
+  onUngroup?: () => void;
+  onToolSelect?: () => void;
+  onToolHand?: () => void;
+  onToolRect?: () => void;
+  onToolEllipse?: () => void;
+  onToolPolygon?: () => void;
+  onShowHelp?: () => void;
 }
 
 /**
@@ -32,44 +53,205 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers) {
         return;
       }
       const mod = e.ctrlKey || e.metaKey;
+      const key = e.key;
+      const lower = key.toLowerCase();
 
-      if (mod && e.shiftKey && (e.key === 'Z' || e.key === 'z')) {
+      // ─── Modifier-based shortcuts ──────────────────────────────────
+      if (mod && e.shiftKey && lower === 'z') {
         e.preventDefault();
         handlers.onRedo?.();
-      } else if (mod && (e.key === 'z' || e.key === 'Z')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'z') {
         e.preventDefault();
         handlers.onUndo?.();
-      } else if (mod && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'y') {
+        e.preventDefault();
+        handlers.onRedo?.();
+        return;
+      }
+      if (mod && e.shiftKey && lower === 'e') {
         e.preventDefault();
         handlers.onExport?.();
-      } else if (mod && (e.key === 's' || e.key === 'S')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 's') {
         e.preventDefault();
         handlers.onSave?.();
-      } else if (mod && (e.key === 'o' || e.key === 'O')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'o') {
         e.preventDefault();
         handlers.onOpen?.();
-      } else if (mod && (e.key === 'n' || e.key === 'N')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'n') {
         e.preventDefault();
         handlers.onNew?.();
-      } else if (mod && (e.key === 'd' || e.key === 'D')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'd') {
         e.preventDefault();
         handlers.onDuplicate?.();
-      } else if (mod && (e.key === 'a' || e.key === 'A')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'a') {
         e.preventDefault();
         handlers.onSelectAll?.();
-      } else if (mod && (e.key === 'l' || e.key === 'L')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'l') {
         e.preventDefault();
         handlers.onToggleLock?.();
-      } else if (mod && e.shiftKey && (e.key === '+' || e.key === '=')) {
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'c') {
+        e.preventDefault();
+        handlers.onCopy?.();
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'x') {
+        e.preventDefault();
+        handlers.onCut?.();
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'v') {
+        e.preventDefault();
+        handlers.onPaste?.();
+        return;
+      }
+      if (mod && e.shiftKey && lower === 'g') {
+        e.preventDefault();
+        handlers.onUngroup?.();
+        return;
+      }
+      if (mod && !e.shiftKey && lower === 'g') {
+        e.preventDefault();
+        handlers.onGroup?.();
+        return;
+      }
+      // Scale section (Ctrl+Shift++/-) — predates the zoom shortcuts below,
+      // kept for consistency with the previous behavior.
+      if (mod && e.shiftKey && (key === '+' || key === '=')) {
         e.preventDefault();
         handlers.onScaleUp?.();
-      } else if (mod && e.shiftKey && (e.key === '_' || e.key === '-')) {
+        return;
+      }
+      if (mod && e.shiftKey && (key === '_' || key === '-')) {
         e.preventDefault();
         handlers.onScaleDown?.();
-      } else if (e.key === 'Delete' || e.key === 'Backspace') {
+        return;
+      }
+      // Viewport zoom (Ctrl without Shift)
+      if (mod && !e.shiftKey && (key === '+' || key === '=')) {
+        e.preventDefault();
+        handlers.onZoomIn?.();
+        return;
+      }
+      if (mod && !e.shiftKey && key === '-') {
+        e.preventDefault();
+        handlers.onZoomOut?.();
+        return;
+      }
+      if (mod && !e.shiftKey && key === '0') {
+        e.preventDefault();
+        handlers.onZoomFit?.();
+        return;
+      }
+      if (mod && !e.shiftKey && key === '1') {
+        e.preventDefault();
+        handlers.onZoomActual?.();
+        return;
+      }
+      // Bracket layer ordering
+      if (!mod && e.shiftKey && key === '{') {
+        e.preventDefault();
+        handlers.onSendToBack?.();
+        return;
+      }
+      if (!mod && e.shiftKey && key === '}') {
+        e.preventDefault();
+        handlers.onBringToFront?.();
+        return;
+      }
+      if (!mod && !e.shiftKey && key === '[') {
+        e.preventDefault();
+        handlers.onSendBackward?.();
+        return;
+      }
+      if (!mod && !e.shiftKey && key === ']') {
+        e.preventDefault();
+        handlers.onBringForward?.();
+        return;
+      }
+      // Arrow-key nudge
+      if (!mod && (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowUp' || key === 'ArrowDown')) {
+        const step = e.shiftKey ? 10 : 1;
+        let dx = 0;
+        let dy = 0;
+        if (key === 'ArrowLeft') dx = -step;
+        else if (key === 'ArrowRight') dx = step;
+        else if (key === 'ArrowUp') dy = -step;
+        else if (key === 'ArrowDown') dy = step;
+        e.preventDefault();
+        handlers.onNudge?.(dx, dy);
+        return;
+      }
+      // Delete / Escape
+      if (key === 'Delete' || key === 'Backspace') {
         handlers.onDelete?.();
-      } else if (e.key === 'Escape') {
+        return;
+      }
+      if (key === 'Escape') {
         handlers.onEscape?.();
+        return;
+      }
+      // Rename triggers
+      if (!mod && !e.shiftKey && key === 'F2') {
+        e.preventDefault();
+        handlers.onRename?.();
+        return;
+      }
+      if (!mod && !e.shiftKey && key === 'Enter') {
+        e.preventDefault();
+        handlers.onRename?.();
+        return;
+      }
+      // Help cheatsheet (Shift+/)
+      if (!mod && e.shiftKey && key === '?') {
+        e.preventDefault();
+        handlers.onShowHelp?.();
+        return;
+      }
+      // Single-letter tool switches (no mod, no shift)
+      if (!mod && !e.shiftKey) {
+        if (lower === 'v') {
+          e.preventDefault();
+          handlers.onToolSelect?.();
+          return;
+        }
+        if (lower === 'h') {
+          e.preventDefault();
+          handlers.onToolHand?.();
+          return;
+        }
+        if (lower === 'r') {
+          e.preventDefault();
+          handlers.onToolRect?.();
+          return;
+        }
+        if (lower === 'o') {
+          e.preventDefault();
+          handlers.onToolEllipse?.();
+          return;
+        }
+        if (lower === 'p') {
+          e.preventDefault();
+          handlers.onToolPolygon?.();
+          return;
+        }
       }
     };
     window.addEventListener('keydown', handler);

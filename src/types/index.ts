@@ -124,6 +124,16 @@ export interface VenueData {
 
 // ─── Store Types ──────────────────────────────────────────────
 
+export type ActiveTool = 'select' | 'hand';
+
+export interface ClipboardPayload {
+  /** Sections were copied in their entirety (with seats + children). */
+  sections: Section[];
+  /** Loose seats were copied without their owning section. The `sectionId`
+   *  points at the section they were copied from so paste can re-home them. */
+  seats: { sectionId: string; seat: Seat }[];
+}
+
 export interface CanvasState {
   venueData: VenueData;
   selectedIds: string[]; // section IDs or seat IDs
@@ -140,6 +150,8 @@ export interface CanvasState {
   dirty: boolean;
   drillPath: string[]; // root-to-active chain of container section IDs
   canvasLocked: boolean; // when true, pan/zoom and edits are disabled on the viewport
+  activeTool: ActiveTool;
+  clipboard: ClipboardPayload | null;
 }
 
 export interface CanvasActions {
@@ -178,6 +190,14 @@ export interface CanvasActions {
   deleteSeats: (seatIds: string[]) => void;
   clearSectionSeats: (sectionId: string) => void;
   scaleSection: (id: string, factor: number, options?: { scaleSeats?: boolean }) => void;
+  setActiveTool: (tool: ActiveTool) => void;
+  copySelection: () => void;
+  cutSelection: () => void;
+  pasteClipboard: (offset?: Point) => string[];
+  nudgeSelection: (dx: number, dy: number) => void;
+  uncontainSection: (id: string) => void;
+  groupSections: (ids: string[]) => string | null;
+  setSectionZIndexToExtreme: (id: string, extreme: 'front' | 'back') => void;
 }
 
 // ─── Seat Generation ──────────────────────────────────────────
