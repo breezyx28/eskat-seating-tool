@@ -108,7 +108,3 @@ jobs:
           done
           echo "Warning: smoke test did not return 200 within 5 attempts."
           exit 1
-
-      - name: Cleanup SSH key
-        if: always()
-        run: rm -f ~/.ssh/deploy_key
