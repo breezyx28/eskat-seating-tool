@@ -18,6 +18,7 @@ import { getVisibleSections, flattenSections, findSectionById } from '@/utils/se
 import { createSection } from '@/utils/createSection';
 import type { Point, Section, SectionShape } from '@/types';
 import { toast } from 'sonner';
+import { DesktopExperienceNotice } from '@/components/playground/DesktopExperienceNotice';
 
 const AUTOSAVE_INTERVAL_MS = 30_000;
 
@@ -390,6 +391,8 @@ export default function Playground() {
       className="flex flex-col h-[100dvh] min-h-[100dvh] w-screen overflow-hidden"
       style={{ background: 'var(--bg-app)' }}
     >
+      <DesktopExperienceNotice />
+
       <Toolbar
         onNew={handleNew}
         onOpen={handleOpen}

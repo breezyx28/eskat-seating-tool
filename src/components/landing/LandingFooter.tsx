@@ -1,43 +1,44 @@
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '@/assets/icons/BrandLogo';
+import { README_ANCHORS } from '@/lib/repoLinks';
 
 interface Column {
   title: string;
-  items: { label: string; href: string; to?: string }[];
+  items: { label: string; href?: string; external?: boolean; to?: string }[];
 }
 
 const COLUMNS: Column[] = [
   {
     title: 'Product',
     items: [
-      { label: 'Playground', href: '#', to: '/playground' },
-      { label: 'Features', href: '#features' },
-      { label: 'Shortcuts', href: '#shortcuts' },
+      { label: 'Playground', to: '/playground' },
+      { label: 'Features', href: README_ANCHORS.featureHighlights, external: true },
+      { label: 'Shortcuts', href: README_ANCHORS.keyboardShortcuts, external: true },
     ],
   },
   {
     title: 'Templates',
     items: [
-      { label: 'Theatre', href: '#templates' },
-      { label: 'Concert', href: '#templates' },
-      { label: 'Stadium', href: '#templates' },
-      { label: 'Cinema', href: '#templates' },
+      { label: 'Theatre', href: README_ANCHORS.templates, external: true },
+      { label: 'Concert', href: README_ANCHORS.templates, external: true },
+      { label: 'Stadium', href: README_ANCHORS.templates, external: true },
+      { label: 'Cinema', href: README_ANCHORS.templates, external: true },
     ],
   },
   {
     title: 'Developer',
     items: [
-      { label: 'Export format', href: '#export' },
-      { label: 'venue.config.ts', href: '#export' },
-      { label: 'JSON schema', href: '#export' },
+      { label: 'Export format', href: README_ANCHORS.exportedComponent, external: true },
+      { label: 'venue.config.ts', href: README_ANCHORS.exportedComponent, external: true },
+      { label: 'JSON schema', href: README_ANCHORS.coreConcepts, external: true },
     ],
   },
   {
     title: 'About',
     items: [
-      { label: 'Changelog', href: '#' },
-      { label: 'Roadmap', href: '#' },
-      { label: 'License', href: '#' },
+      { label: 'Changelog', href: README_ANCHORS.roadmap, external: true },
+      { label: 'Roadmap', href: README_ANCHORS.roadmap, external: true },
+      { label: 'License', href: README_ANCHORS.license, external: true },
     ],
   },
 ];
@@ -73,7 +74,7 @@ export function LandingFooter() {
               <span className="mono-label">{col.title}</span>
               <ul className="flex flex-col gap-2">
                 {col.items.map((item) => (
-                  <li key={item.label}>
+                  <li key={`${col.title}-${item.label}`}>
                     {item.to ? (
                       <Link
                         to={item.to}
@@ -91,6 +92,9 @@ export function LandingFooter() {
                     ) : (
                       <a
                         href={item.href}
+                        {...(item.external
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
                         className="text-[13px] transition-colors duration-base"
                         style={{ color: 'var(--text-secondary)' }}
                         onMouseEnter={(e) => {

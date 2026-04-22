@@ -146,42 +146,49 @@ export function TemplateDemo() {
           </p>
         </div>
 
-        {/* Template picker */}
-        <div
-          className="mb-5 flex flex-wrap gap-1.5 rounded-pill p-1.5 w-fit"
-          style={{
-            background: 'var(--bg-panel-raised)',
-            border: '1px solid var(--border)',
-          }}
-        >
-          {TEMPLATE_SHOWCASE.map((tpl) => {
-            const active = tpl.id === activeTemplate;
-            return (
-              <button
-                key={tpl.id}
-                type="button"
-                onClick={() => setActiveTemplate(tpl.id)}
-                className="h-8 rounded-pill px-3.5 text-[12px] font-medium transition-[background-color,color,transform] duration-base ease-soft-spring focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                style={{
-                  background: active ? 'var(--accent-soft)' : 'transparent',
-                  color: active ? 'var(--accent)' : 'var(--text-secondary)',
-                }}
-              >
-                {tpl.name}
-                <span
-                  className="ml-1.5 text-[10px] tab-num"
+        {/* Template picker — horizontal scroll on narrow screens; wrap on md+ */}
+        <div className="mb-5 w-full min-w-0">
+          <div
+            className="flex max-w-full flex-nowrap gap-1 overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-pill p-1.5 [scrollbar-width:thin] md:flex-wrap md:overflow-x-visible md:gap-1.5 md:p-1.5"
+            style={{
+              background: 'var(--bg-panel-raised)',
+              border: '1px solid var(--border)',
+              WebkitOverflowScrolling: 'touch',
+            }}
+            role="tablist"
+            aria-label="Template"
+          >
+            {TEMPLATE_SHOWCASE.map((tpl) => {
+              const active = tpl.id === activeTemplate;
+              return (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setActiveTemplate(tpl.id)}
+                  className="h-8 shrink-0 rounded-pill px-2.5 text-[11px] font-medium transition-[background-color,color,transform] duration-base ease-soft-spring focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:px-3 sm:text-[12px] md:px-3.5"
                   style={{
-                    color: active
-                      ? 'var(--accent)'
-                      : 'var(--text-faint)',
-                    opacity: 0.75,
+                    background: active ? 'var(--accent-soft)' : 'transparent',
+                    color: active ? 'var(--accent)' : 'var(--text-secondary)',
                   }}
                 >
-                  {tpl.meta}
-                </span>
-              </button>
-            );
-          })}
+                  <span className="whitespace-nowrap">{tpl.name}</span>
+                  <span
+                    className="ml-1 text-[9px] tab-num sm:ml-1.5 sm:text-[10px]"
+                    style={{
+                      color: active
+                        ? 'var(--accent)'
+                        : 'var(--text-faint)',
+                      opacity: 0.75,
+                    }}
+                  >
+                    {tpl.meta}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Window chrome */}

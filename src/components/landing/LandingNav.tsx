@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { BrandLogo } from '@/assets/icons/BrandLogo';
+import { README_ANCHORS } from '@/lib/repoLinks';
 
 const LINKS: { label: string; href: string }[] = [
   { label: 'Features', href: '#features' },
@@ -55,7 +56,9 @@ export function LandingNav() {
 
         <div className="flex items-center gap-2">
           <a
-            href="https://github.com"
+            href={README_ANCHORS.quickStart}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden text-[13px] transition-colors duration-base md:inline"
             style={{ color: 'var(--text-secondary)' }}
             onMouseEnter={(e) => {
