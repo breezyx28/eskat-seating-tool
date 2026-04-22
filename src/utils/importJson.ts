@@ -1,5 +1,5 @@
 import type { VenueData, Section, Seat, StageElement, PatternType } from '@/types';
-import { sanitizeSvg } from './sanitizeSvg';
+import { sanitizeSvg, sanitizeSvgFragment } from './sanitizeSvg';
 
 export class ImportError extends Error {}
 
@@ -115,7 +115,10 @@ function normalizeSection(raw: unknown, index: number): Section {
       color: typeof p.color === 'string' ? p.color : undefined,
       size: typeof p.size === 'number' ? p.size : undefined,
       spacing: typeof p.spacing === 'number' ? p.spacing : undefined,
-      customSvg: typeof p.customSvg === 'string' ? p.customSvg : undefined,
+      customSvg:
+        typeof p.customSvg === 'string'
+          ? sanitizeSvgFragment(p.customSvg) || undefined
+          : undefined,
       opacity: typeof p.opacity === 'number' ? p.opacity : undefined,
     };
   }

@@ -91,6 +91,34 @@ server {
 }
 ```
 
+After Certbot, your `listen 443 ssl` server block should also send **browser security headers**. Add inside the same `server { … }` that serves TLS (adjust `max-age` once you are confident nothing breaks):
+
+```nginx
+    # --- Browser security (tune CSP before enforcing) ---
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+
+    # Phase 1: log violations only (Chrome DevTools → Console / Reports)
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" always;
+
+    # Phase 2: after zero violations in production, swap Report-Only for enforce:
+    # add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" always;
+```
+
+If you embed third-party scripts or APIs later, extend `script-src` / `connect-src` accordingly, then `nginx -t` and reload.
+
+### Chrome still says “broken HTTPS” on production
+
+Your **document** TLS can be valid while the Security tab complains about **one bad subresource** or an old **“allow insecure content”** override.
+
+1. Open exactly **`https://eskat.kat-jr.com`** (not `http://`, not a different host).
+2. DevTools → **Network** → reload → note any **red** row or “mixed content” / certificate error; copy the **Request URL** (no secrets).
+3. Chrome → **Site settings** for that origin → **Reset permissions**; retry in **Incognito** with extensions disabled.
+4. Ensure no hosting panel injects analytics or “optimisation” scripts over `http://` or a host with a broken cert.
+
 Enable & reload:
 
 ```bash
@@ -138,7 +166,7 @@ The workflow:
 5. Rsyncs **the contents of `dist/`** into `/var/www/html/eskat/` (trailing slash on the source path means "contents, not folder")
 6. Uses `--delete` so files removed between builds (e.g. old hashed assets) are pruned from the server
 7. Reloads nginx (best-effort, won't fail the deploy if sudoers isn't set)
-8. Smoke-tests `https://eskat.kat-jr.com/` with HTTP 200 expectation
+8. Fails the job if `dist/` contains disallowed `http://` URLs (see workflow step; SVG `xmlns` is allow-listed)
 
 ### What ends up on the server
 

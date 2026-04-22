@@ -1,5 +1,6 @@
 import type { SectionPattern } from '@/types';
 import { PATTERN_PRESETS } from '@/utils/patterns';
+import { sanitizeSvgFragment } from '@/utils/sanitizeSvg';
 import { ColorPicker } from '@/components/ui/ColorPicker';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -100,7 +101,13 @@ export function PatternPicker({ value, onChange, onCommit }: PatternPickerProps)
               <textarea
                 value={v.customSvg ?? ''}
                 onChange={(e) => patch({ customSvg: e.target.value })}
-                onBlur={onCommit}
+                onBlur={() => {
+                  if ((v.customSvg ?? '').trim()) {
+                    const clean = sanitizeSvgFragment(v.customSvg ?? '');
+                    if (clean !== (v.customSvg ?? '')) patch({ customSvg: clean });
+                  }
+                  onCommit?.();
+                }}
                 rows={4}
                 placeholder='<circle cx="10" cy="10" r="3" fill="currentColor" />'
                 className="w-full text-[11px] font-mono p-2 rounded-sm resize-y transition-colors duration-base focus:outline-none focus:border-[var(--accent-border)] focus:bg-[var(--bg-panel-raised)]"

@@ -45,6 +45,25 @@ jobs:
           echo "Build output:"
           ls -lah dist/
 
+      - name: Check dist for accidental cleartext http:// URLs
+        run: |
+          set -euo pipefail
+          set +e
+          RAW=$(rg --fixed-strings --no-heading --glob '!*.map' 'http://' dist 2>/dev/null)
+          RGCODE=$?
+          set -e
+          if [[ "${RGCODE}" -ne 0 && -z "${RAW}" ]]; then
+            echo "No http:// references in dist/. OK."
+            exit 0
+          fi
+          BAD=$(echo "${RAW}" | grep -Ev 'http://www\.w3\.org/2000/svg' || true)
+          if [[ -n "${BAD}" ]]; then
+            echo "Disallowed http:// in dist/ (mixed-content / broken HTTPS risk):"
+            echo "${BAD}"
+            exit 1
+          fi
+          echo "Only allow-listed http:// (SVG xmlns) in dist/. OK."
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh

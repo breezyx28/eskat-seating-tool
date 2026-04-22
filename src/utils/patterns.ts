@@ -1,4 +1,5 @@
 import type { SectionPattern } from '@/types';
+import { sanitizeSvgFragment } from '@/utils/sanitizeSvg';
 
 export interface RenderedPattern {
   id: string;
@@ -43,7 +44,7 @@ export function renderPattern(
       break;
     }
     case 'custom': {
-      body = pattern.customSvg ?? '';
+      body = sanitizeSvgFragment(pattern.customSvg ?? '');
       break;
     }
   }
