@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESKAT — Arc Venue Logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #07090f;
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 70px 50px;
+  }
+
+  .page-header {
+    text-align: center; margin-bottom: 90px;
+  }
+  .page-header .eyebrow {
+    font-size: 10px; letter-spacing: 6px; color: rgba(255,255,255,0.18);
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .page-header h1 {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800;
+    letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.8);
+    margin-bottom: 10px;
+  }
+  .page-header .desc {
+    font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.16);
+  }
+
+  /* ── SECTION ROWS ── */
+  .section { margin-bottom: 100px; }
+  .section-head {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 44px;
+  }
+  .section-head .num {
+    font-family: 'Outfit', sans-serif; font-weight: 800;
+    font-size: 11px; letter-spacing: 4px; color: rgba(255,255,255,0.15);
+  }
+  .section-head .label {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.22);
+  }
+  .section-head .rule { flex:1; height:1px; background: rgba(255,255,255,0.06); }
+
+  /* ── CARD GRID ── */
+  .card-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .logo-card {
+    border-radius: 28px;
+    padding: 52px 28px 36px;
+    display: flex; flex-direction: column; align-items: center; gap: 36px;
+    position: relative; overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    cursor: pointer;
+    animation: up 0.6s ease both;
+  }
+  .logo-card:hover { transform: translateY(-7px) scale(1.012); }
+  @keyframes up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Dark bg cards */
+  .bg-teal  { background:linear-gradient(155deg,#0b1c20 0%,#060d10 100%); border:1px solid rgba(78,205,196,0.18); box-shadow:0 24px 70px rgba(0,0,0,0.6),inset 0 1px 0 rgba(78,205,196,0.07); }
+  .bg-blue  { background:linear-gradient(155deg,#0a0e22 0%,#060710 100%); border:1px solid rgba(110,132,255,0.18); box-shadow:0 24px 70px rgba(0,0,0,0.6),inset 0 1px 0 rgba(110,132,255,0.07); }
+  .bg-amber { background:linear-gradient(155deg,#1c1008 0%,#0d0704 100%); border:1px solid rgba(255,152,60,0.18); box-shadow:0 24px 70px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,152,60,0.07); }
+  /* Light bg cards */
+  .bg-light-teal  { background:linear-gradient(155deg,#e8f8f6 0%,#d0f0ec 100%); border:1px solid rgba(78,205,196,0.3); box-shadow:0 24px 70px rgba(0,0,0,0.25); }
+  .bg-light-blue  { background:linear-gradient(155deg,#eaecf8 0%,#d8dcf5 100%); border:1px solid rgba(110,132,255,0.3); box-shadow:0 24px 70px rgba(0,0,0,0.25); }
+  .bg-light-amber { background:linear-gradient(155deg,#faf2e8 0%,#f5e4cc 100%); border:1px solid rgba(255,152,60,0.3); box-shadow:0 24px 70px rgba(0,0,0,0.25); }
+  /* Solid color cards */
+  .bg-solid-teal  { background:#4ECDC4; border:1px solid rgba(255,255,255,0.15); box-shadow:0 24px 70px rgba(78,205,196,0.3); }
+  .bg-solid-blue  { background:#6E84FF; border:1px solid rgba(255,255,255,0.15); box-shadow:0 24px 70px rgba(110,132,255,0.3); }
+  .bg-solid-amber { background:#FF983C; border:1px solid rgba(255,255,255,0.15); box-shadow:0 24px 70px rgba(255,152,60,0.3); }
+
+  /* ambient glow */
+  .glow {
+    position:absolute; top:30px; left:50%; transform:translateX(-50%);
+    width:240px; height:180px; border-radius:50%; pointer-events:none;
+  }
+  .bg-teal  .glow { background:radial-gradient(ellipse,rgba(78,205,196,0.1) 0%,transparent 68%); }
+  .bg-blue  .glow { background:radial-gradient(ellipse,rgba(110,132,255,0.12) 0%,transparent 68%); }
+  .bg-amber .glow { background:radial-gradient(ellipse,rgba(255,152,60,0.1) 0%,transparent 68%); }
+
+  .chip {
+    position:absolute; top:18px; right:18px;
+    font-size:8px; letter-spacing:2px; padding:3px 9px;
+    border-radius:20px; text-transform:uppercase;
+  }
+
+  .logo-display {
+    display:flex; align-items:center; justify-content:center;
+    width:100%; min-height:180px; position:relative; z-index:1;
+  }
+
+  /* hover glow on SVG */
+  .logo-card:hover svg { filter: drop-shadow(0 0 18px var(--accent-glow, rgba(78,205,196,0.5))); }
+  .bg-teal:hover svg, .bg-light-teal:hover svg   { --accent-glow: rgba(78,205,196,0.5); }
+  .bg-blue:hover svg, .bg-light-blue:hover svg   { --accent-glow: rgba(110,132,255,0.5); }
+  .bg-amber:hover svg,.bg-light-amber:hover svg  { --accent-glow: rgba(255,152,60,0.5); }
+  .bg-solid-teal:hover svg  { --accent-glow: rgba(0,80,70,0.6); }
+  .bg-solid-blue:hover svg  { --accent-glow: rgba(30,50,140,0.6); }
+  .bg-solid-amber:hover svg { --accent-glow: rgba(140,60,0,0.6); }
+
+  /* wordmark */
+  .wm { text-align:center; width:100%; padding-top:24px; border-top:1px solid rgba(255,255,255,0.06); }
+  .bg-light-teal  .wm, .bg-light-blue .wm, .bg-light-amber .wm { border-top-color: rgba(0,0,0,0.07); }
+  .bg-solid-teal  .wm, .bg-solid-blue .wm, .bg-solid-amber .wm { border-top-color: rgba(255,255,255,0.2); }
+
+  .wm-name {
+    font-family:'Outfit',sans-serif; font-weight:800;
+    font-size:26px; letter-spacing:6px; line-height:1; color:#fff;
+  }
+  .bg-light-teal  .wm-name, .bg-light-blue .wm-name, .bg-light-amber .wm-name { color:#111; }
+  .bg-solid-teal  .wm-name, .bg-solid-blue .wm-name, .bg-solid-amber .wm-name { color:#fff; }
+
+  .wm-name .es  { opacity:0.45; }
+  .bg-light-teal  .wm-name .es, .bg-light-blue .wm-name .es, .bg-light-amber .wm-name .es { opacity:0.3; }
+  .bg-solid-teal  .wm-name .es, .bg-solid-blue .wm-name .es, .bg-solid-amber .wm-name .es { opacity:0.55; }
+
+  .wm-tag {
+    font-size:8px; letter-spacing:4px; text-transform:uppercase; margin-top:7px;
+    color:rgba(255,255,255,0.2);
+  }
+  .bg-light-teal  .wm-tag, .bg-light-blue .wm-tag, .bg-light-amber .wm-tag { color:rgba(0,0,0,0.25); }
+  .bg-solid-teal  .wm-tag, .bg-solid-blue .wm-tag, .bg-solid-amber .wm-tag { color:rgba(255,255,255,0.45); }
+
+  /* section footer */
+  .page-footer {
+    text-align:center; margin-top:40px; padding-top:36px;
+    border-top:1px solid rgba(255,255,255,0.05);
+  }
+  .page-footer p { font-size:9px;letter-spacing:4px;color:rgba(255,255,255,0.1);text-transform:uppercase; }
+  .page-footer .brand {
+    font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+    letter-spacing:8px;color:rgba(78,205,196,0.3);margin-top:8px;
+  }
+
+  @media(max-width:900px){ .card-row{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Brand Identity · Horseshoe Arc Icon</div>
+  <h1>ESKAT — Logo Concepts</h1>
+  <div class="desc">The universal venue shape · 3 palettes · 3 background contexts each</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — TEAL / FROST
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="num">01</span>
+    <span class="label">Frost Teal</span>
+    <div class="rule"></div>
+  </div>
+  <div class="card-row">
+
+    <!-- Dark -->
+    <div class="logo-card bg-teal" style="animation-delay:0.08s">
+      <div class="glow"></div>
+      <span class="chip" style="background:rgba(78,205,196,0.08);color:rgba(78,205,196,0.55);border:1px solid rgba(78,205,196,0.15);">Dark</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="arc-t-1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.7"/>
+              <stop offset="50%" stop-color="#A8FFE8" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.7"/>
+            </linearGradient>
+            <linearGradient id="arc-t-2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.45"/>
+              <stop offset="50%" stop-color="#4ECDC4" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.45"/>
+            </linearGradient>
+            <linearGradient id="arc-t-3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.2"/>
+              <stop offset="50%" stop-color="#4ECDC4" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+          <!-- Horseshoe arc — 3 concentric rings open at bottom, plan view -->
+          <!-- Outer ring -->
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="url(#arc-t-3)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Middle ring -->
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="url(#arc-t-2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Inner ring -->
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="url(#arc-t-1)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Stage/pitch dot at centre -->
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#4ECDC4" opacity="0.25"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#A8FFE8" opacity="0.7"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+          <!-- Gap indicators at bottom (open horseshoe ends) -->
+          <circle cx="18" cy="100" r="3.5" fill="#4ECDC4" opacity="0.5"/>
+          <circle cx="142" cy="100" r="3.5" fill="#4ECDC4" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span>KAT</div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <!-- Light -->
+    <div class="logo-card bg-light-teal" style="animation-delay:0.16s">
+      <span class="chip" style="background:rgba(78,205,196,0.12);color:#1a7a74;border:1px solid rgba(78,205,196,0.25);">Light</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(78,205,196,0.25)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(78,205,196,0.55)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#4ECDC4" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#4ECDC4" opacity="0.15"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#4ECDC4" opacity="0.4"/>
+          <circle cx="80" cy="72" r="2.5" fill="#0d5c58" opacity="0.85"/>
+          <circle cx="18" cy="100" r="3.5" fill="#4ECDC4" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#4ECDC4" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span>KAT</div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <!-- Solid -->
+    <div class="logo-card bg-solid-teal" style="animation-delay:0.24s">
+      <span class="chip" style="background:rgba(0,0,0,0.12);color:rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.1);">Solid</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(255,255,255,0.25)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(255,255,255,0.55)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#fff" opacity="0.15"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#fff" opacity="0.45"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.95"/>
+          <circle cx="18" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span>KAT</div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — ELECTRIC BLUE
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="num">02</span>
+    <span class="label">Electric Blue</span>
+    <div class="rule"></div>
+  </div>
+  <div class="card-row">
+
+    <div class="logo-card bg-blue" style="animation-delay:0.1s">
+      <div class="glow"></div>
+      <span class="chip" style="background:rgba(110,132,255,0.08);color:rgba(110,132,255,0.6);border:1px solid rgba(110,132,255,0.15);">Dark</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="arc-b-1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6E84FF" stop-opacity="0.7"/>
+              <stop offset="50%" stop-color="#C0CCFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#6E84FF" stop-opacity="0.7"/>
+            </linearGradient>
+            <linearGradient id="arc-b-2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6E84FF" stop-opacity="0.4"/>
+              <stop offset="50%" stop-color="#6E84FF" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#6E84FF" stop-opacity="0.4"/>
+            </linearGradient>
+            <linearGradient id="arc-b-3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6E84FF" stop-opacity="0.18"/>
+              <stop offset="50%" stop-color="#6E84FF" stop-opacity="0.38"/>
+              <stop offset="100%" stop-color="#6E84FF" stop-opacity="0.18"/>
+            </linearGradient>
+          </defs>
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="url(#arc-b-3)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="url(#arc-b-2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="url(#arc-b-1)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#6E84FF" opacity="0.2"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#C0CCFF" opacity="0.65"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+          <circle cx="18" cy="100" r="3.5" fill="#6E84FF" opacity="0.5"/>
+          <circle cx="142" cy="100" r="3.5" fill="#6E84FF" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span><span style="color:#8BA4FF">KAT</span></div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <div class="logo-card bg-light-blue" style="animation-delay:0.18s">
+      <span class="chip" style="background:rgba(110,132,255,0.1);color:#3348c0;border:1px solid rgba(110,132,255,0.22);">Light</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(110,132,255,0.22)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(110,132,255,0.5)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#6E84FF" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#6E84FF" opacity="0.12"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#6E84FF" opacity="0.4"/>
+          <circle cx="80" cy="72" r="2.5" fill="#2030a0" opacity="0.85"/>
+          <circle cx="18" cy="100" r="3.5" fill="#6E84FF" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#6E84FF" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span><span style="color:#4458d0">KAT</span></div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <div class="logo-card bg-solid-blue" style="animation-delay:0.26s">
+      <span class="chip" style="background:rgba(0,0,0,0.1);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);">Solid</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(255,255,255,0.22)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(255,255,255,0.52)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#fff" opacity="0.15"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#fff" opacity="0.45"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.95"/>
+          <circle cx="18" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span>KAT</div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — AMBER EMBER
+════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="num">03</span>
+    <span class="label">Amber Ember</span>
+    <div class="rule"></div>
+  </div>
+  <div class="card-row">
+
+    <div class="logo-card bg-amber" style="animation-delay:0.12s">
+      <div class="glow"></div>
+      <span class="chip" style="background:rgba(255,152,60,0.08);color:rgba(255,152,60,0.6);border:1px solid rgba(255,152,60,0.15);">Dark</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="arc-a-1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF983C" stop-opacity="0.7"/>
+              <stop offset="50%" stop-color="#FFD0A0" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#FF983C" stop-opacity="0.7"/>
+            </linearGradient>
+            <linearGradient id="arc-a-2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF983C" stop-opacity="0.4"/>
+              <stop offset="50%" stop-color="#FF983C" stop-opacity="0.72"/>
+              <stop offset="100%" stop-color="#FF983C" stop-opacity="0.4"/>
+            </linearGradient>
+            <linearGradient id="arc-a-3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF983C" stop-opacity="0.18"/>
+              <stop offset="50%" stop-color="#FF983C" stop-opacity="0.36"/>
+              <stop offset="100%" stop-color="#FF983C" stop-opacity="0.18"/>
+            </linearGradient>
+          </defs>
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="url(#arc-a-3)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="url(#arc-a-2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="url(#arc-a-1)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#FF983C" opacity="0.2"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#FFD0A0" opacity="0.65"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+          <circle cx="18" cy="100" r="3.5" fill="#FF983C" opacity="0.5"/>
+          <circle cx="142" cy="100" r="3.5" fill="#FF983C" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span><span style="color:#FF983C">KAT</span></div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <div class="logo-card bg-light-amber" style="animation-delay:0.2s">
+      <span class="chip" style="background:rgba(255,152,60,0.1);color:#b05010;border:1px solid rgba(255,152,60,0.22);">Light</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(255,152,60,0.2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(255,152,60,0.5)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#FF983C" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#FF983C" opacity="0.12"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#FF983C" opacity="0.38"/>
+          <circle cx="80" cy="72" r="2.5" fill="#7a2c00" opacity="0.85"/>
+          <circle cx="18" cy="100" r="3.5" fill="#FF983C" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#FF983C" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span><span style="color:#d06010">KAT</span></div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+    <div class="logo-card bg-solid-amber" style="animation-delay:0.28s">
+      <span class="chip" style="background:rgba(0,0,0,0.1);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);">Solid</span>
+      <div class="logo-display">
+        <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="rgba(255,255,255,0.22)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="rgba(255,255,255,0.52)" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="80" cy="72" rx="9" ry="6" fill="#fff" opacity="0.15"/>
+          <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#fff" opacity="0.45"/>
+          <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.95"/>
+          <circle cx="18" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+          <circle cx="142" cy="100" r="3.5" fill="#fff" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="wm">
+        <div class="wm-name"><span class="es">ES</span>KAT</div>
+        <div class="wm-tag">Event Seating · Blueprint</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="page-footer">
+  <p>Horseshoe Arc · Universal Venue Mark · 3 Palettes · 3 Contexts Each · SVG Scalable</p>
+  <div class="brand">ESKAT · EVENT SEATING ARCHITECTURE TOOL</div>
+</div>
+
+</body>
+</html>

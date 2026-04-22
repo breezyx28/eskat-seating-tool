@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESKAT — Logo Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --frost: rgba(180,230,220,0.13);
+    --teal: #4ECDC4;
+    --mint: #A8FFE8;
+    --forest: #0D3B2E;
+    --dark: #080C0B;
+    --glass: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.12);
+    --glow-teal: 0 0 30px rgba(78,205,196,0.4);
+    --glow-mint: 0 0 30px rgba(168,255,232,0.3);
+  }
+
+  body {
+    background: #060A09;
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  /* ---- HEADER ---- */
+  .page-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .page-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .page-header p {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+
+  /* ---- SECTION ---- */
+  .section {
+    margin-bottom: 100px;
+  }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-label .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: rgba(78,205,196,0.15);
+    line-height: 1;
+  }
+  .section-label .info h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .section-label .info p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+  .divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(78,205,196,0.3), transparent);
+  }
+
+  /* ---- LOGO GRID ---- */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .logo-card {
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 48px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .logo-card:hover {
+    border-color: rgba(78,205,196,0.4);
+    transform: translateY(-4px);
+  }
+  .logo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(78,205,196,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .variant-tag {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+  }
+
+  .logo-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 160px;
+  }
+
+  .logo-meta {
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 20px;
+    width: 100%;
+  }
+  .logo-meta .tagline {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+  }
+  .logo-meta .name {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* ==========================================
+     STYLE 1 — PIXEL / BLOCK MARK (LiveKit-ish)
+     Dark BG + glassy frost teal accent
+  ========================================== */
+
+  /* S1 V1 — Dark square with pixel cutout mark + wordmark below */
+  .s1v1-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .s1v1-icon {
+    width: 72px;
+    height: 72px;
+    background: #0D3B2E;
+    border-radius: 14px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(78,205,196,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  /* Pixel grid cutouts inside icon */
+  .s1v1-icon::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px;
+    width: 26px; height: 26px;
+    background: var(--teal);
+    border-radius: 4px;
+    box-shadow: 28px 0 0 var(--teal), 0 28px 0 rgba(78,205,196,0.35), 28px 28px 0 rgba(78,205,196,0.15);
+  }
+  .s1v1-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #fff;
+  }
+  .s1v1-wordmark span {
+    color: var(--teal);
+  }
+
+  /* S1 V2 — Full dark card, pixel grid as seat map */
+  .s1v2-card {
+    width: 180px;
+    height: 100px;
+    background: linear-gradient(135deg, #0a1a16 0%, #071210 100%);
+    border: 1px solid rgba(78,205,196,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 0 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(78,205,196,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .s1v2-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(78,205,196,0.12), transparent 70%);
+    border-radius: 50%;
+  }
+  .s1v2-pixels {
+    display: grid;
+    grid-template-columns: repeat(3, 8px);
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .s1v2-pixels .px {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--teal);
+  }
+  .s1v2-pixels .px.off { background: rgba(78,205,196,0.15); }
+  .s1v2-pixels .px.mid { background: rgba(78,205,196,0.5); }
+  .s1v2-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1;
+  }
+  .s1v2-text .sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(78,205,196,0.6);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* S1 V3 — Frost glass pill */
+  .s1v3-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    background: rgba(78,205,196,0.06);
+    border: 1px solid rgba(78,205,196,0.25);
+    border-radius: 40px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .s1v3-icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+  }
+  .s1v3-icon .c {
+    border-radius: 3px;
+    background: var(--teal);
+  }
+  .s1v3-icon .c.dim { background: rgba(78,205,196,0.25); }
+  .s1v3-icon .c.off { background: rgba(78,205,196,0.08); }
+  .s1v3-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+  .s1v3-text em {
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  /* ==========================================
+     STYLE 2 — MODULAR LETTERFORM (DNA-ish)
+     Geometric seat-grid forming "E" or "ES"
+     Forest green + mint
+  ========================================== */
+
+  /* S2 V1 — Geometric "E" built from seat blocks */
+  .s2v1-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .s2v1-e {
+    position: relative;
+    width: 52px;
+    height: 56px;
+  }
+  .block {
+    position: absolute;
+    background: var(--teal);
+    border-radius: 4px;
+  }
+  /* E shape using blocks */
+  .e-vert { left: 0; top: 0; width: 14px; height: 56px; } /* vertical spine */
+  .e-top  { left: 0; top: 0; width: 52px; height: 14px; } /* top bar */
+  .e-mid  { left: 0; top: 21px; width: 38px; height: 14px; background: rgba(168,255,232,0.7); } /* mid bar */
+  .e-bot  { left: 0; top: 42px; width: 52px; height: 14px; } /* bot bar */
+  /* accent dots */
+  .e-dot1 { right: -8px; top: 4px; width: 6px; height: 6px; border-radius: 2px; background: var(--mint); opacity: 0.8; }
+  .e-dot2 { right: -8px; top: 26px; width: 6px; height: 6px; border-radius: 2px; background: var(--mint); opacity: 0.5; }
+
+  .s2v1-wordstack {
+    display: flex;
+    flex-direction: column;
+  }
+  .s2v1-wordstack .main {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #fff;
+    line-height: 1;
+  }
+  .s2v1-wordstack .main span { color: var(--teal); }
+  .s2v1-wordstack .sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 5px;
+  }
+
+  /* S2 V2 — Grid of seats forming logo mark */
+  .s2v2-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .seat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 14px);
+    grid-template-rows: repeat(5, 14px);
+    gap: 4px;
+  }
+  .seat-grid .s {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: rgba(78,205,196,0.12);
+  }
+  .seat-grid .s.on { background: var(--teal); }
+  .seat-grid .s.hi { background: var(--mint); }
+  .seat-grid .s.md { background: rgba(78,205,196,0.45); }
+  .s2v2-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    color: #fff;
+  }
+  .s2v2-text span { color: var(--teal); }
+
+  /* S2 V3 — Two-color modular square mark */
+  .s2v3-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .s2v3-mark {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(3,1fr);
+    gap: 5px;
+  }
+  .s2v3-mark .m {
+    border-radius: 4px;
+    background: var(--forest);
+    border: 1px solid rgba(78,205,196,0.2);
+  }
+  .s2v3-mark .m.a { background: var(--teal); border-color: var(--teal); }
+  .s2v3-mark .m.b { background: var(--mint); border-color: var(--mint); }
+  .s2v3-mark .m.c { background: rgba(78,205,196,0.3); border-color: rgba(78,205,196,0.5); }
+  .s2v3-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .s2v3-info .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+  .s2v3-info .logo-name span { color: var(--teal); }
+  .s2v3-info .tagline-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 4px;
+  }
+
+  /* ==========================================
+     STYLE 3 — TYPOGRAPHIC WORDMARK WITH PIXEL GAPS
+     Futuristic gradient / liquid glass
+  ========================================== */
+
+  /* S3 V1 — Wordmark with gradient fill + pixel-gap letter "A" in ESKAT */
+  .s3v1-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .s3v1-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 8px;
+    background: linear-gradient(135deg, #A8FFE8 0%, #4ECDC4 40%, #1A9E96 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    position: relative;
+    filter: drop-shadow(0 0 20px rgba(78,205,196,0.35));
+  }
+  .s3v1-divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .s3v1-divider .line { flex:1; height: 1px; background: linear-gradient(90deg, transparent, rgba(78,205,196,0.4), transparent); }
+  .s3v1-divider .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--teal); }
+  .s3v1-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+
+  /* S3 V2 — Glass card with liquid gradient bg + wordmark */
+  .s3v2-card {
+    width: 220px;
+    height: 110px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(14,40,33,0.9) 0%, rgba(6,18,15,0.95) 100%);
+    border: 1px solid rgba(78,205,196,0.25);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(168,255,232,0.12), 0 0 60px rgba(78,205,196,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .s3v2-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(78,205,196,0.15), transparent 60%);
+    border-radius: 50%;
+  }
+  .s3v2-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(168,255,232,0.08), transparent 60%);
+    border-radius: 50%;
+  }
+  .s3v2-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .s3v2-word {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+  }
+  .s3v2-es {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1;
+  }
+  .s3v2-kat {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #A8FFE8, #4ECDC4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .s3v2-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    background: rgba(78,205,196,0.1);
+    border: 1px solid rgba(78,205,196,0.2);
+    border-radius: 20px;
+  }
+  .s3v2-badge-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--teal); }
+  .s3v2-badge span { font-size: 8px; letter-spacing: 3px; color: rgba(78,205,196,0.7); }
+
+  /* S3 V3 — Monochrome inverted: white on black with frost shimmer */
+  .s3v3-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .s3v3-icon-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .s3v3-seat {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--teal);
+  }
+  .s3v3-seat.dim { background: rgba(78,205,196,0.25); }
+  .s3v3-wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 46px;
+    letter-spacing: 10px;
+    color: #fff;
+    line-height: 1;
+    position: relative;
+  }
+  /* pixel gap in K */
+  .s3v3-wordmark .gap {
+    display: inline-block;
+    position: relative;
+    color: #fff;
+  }
+  .s3v3-wordmark .gap::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: var(--teal);
+    border-radius: 1px;
+  }
+  .s3v3-sub {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 8px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.2);
+  }
+  .s3v3-sub .accent { color: var(--teal); }
+
+  /* Card backgrounds per style section */
+  .style1 .logo-card { background: linear-gradient(160deg, #071210 0%, #040d0a 100%); }
+  .style2 .logo-card { background: linear-gradient(160deg, #091a14 0%, #050f0b 100%); }
+  .style3 .logo-card { background: linear-gradient(160deg, #06100e 0%, #030a08 100%); }
+
+  /* Light variant card */
+  .logo-card.light {
+    background: linear-gradient(160deg, #f0faf8 0%, #e8f5f2 100%) !important;
+  }
+  .logo-card.light .logo-meta .tagline,
+  .logo-card.light .logo-meta .name { color: rgba(0,0,0,0.35); }
+  .logo-card.light .variant-tag { color: rgba(0,0,0,0.25); }
+
+  /* ---- FOOTER ---- */
+  .page-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .page-footer p {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.15);
+  }
+  .page-footer .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: var(--teal);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 900px) {
+    .logo-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>ESKAT — Brand Identity Concepts</h1>
+  <p>Event Seating Architecture Tool · 3 Style Directions · 3 Variants Each</p>
+</div>
+
+<!-- ======================== STYLE 1 ======================== -->
+<div class="section style1">
+  <div class="section-label">
+    <span class="num">01</span>
+    <div class="info">
+      <h2>PIXEL / BLOCK MARK</h2>
+      <p>LiveKit-inspired · Dark + Frost Teal · Geometric grid language</p>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="logo-grid">
+
+    <!-- S1 V1 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant A</span>
+      <div class="logo-display">
+        <div class="s1v1-wrap">
+          <div class="s1v1-icon"></div>
+          <div class="s1v1-wordmark">ES<span>KAT</span></div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Blueprint your audience</div>
+        <div class="name">Icon + Wordmark · Dark</div>
+      </div>
+    </div>
+
+    <!-- S1 V2 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant B</span>
+      <div class="logo-display">
+        <div class="s1v2-card">
+          <div class="s1v2-pixels">
+            <div class="px on"></div><div class="px on"></div><div class="px on"></div>
+            <div class="px on"></div><div class="px off"></div><div class="px off"></div>
+            <div class="px on"></div><div class="px mid"></div><div class="px off"></div>
+          </div>
+          <div class="s1v2-text">
+            ESKAT
+            <span class="sub">EVENT SEATING</span>
+          </div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Seat-pixel mark</div>
+        <div class="name">Horizontal Card · Dark Glass</div>
+      </div>
+    </div>
+
+    <!-- S1 V3 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant C</span>
+      <div class="logo-display">
+        <div class="s1v3-wrap">
+          <div class="s1v3-icon">
+            <div class="c"></div><div class="c dim"></div>
+            <div class="c dim"></div><div class="c off"></div>
+          </div>
+          <div class="s1v3-text"><em>ES</em>KAT</div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Blueprint your audience</div>
+        <div class="name">Frost Pill · Compact</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======================== STYLE 2 ======================== -->
+<div class="section style2">
+  <div class="section-label">
+    <span class="num">02</span>
+    <div class="info">
+      <h2>MODULAR LETTERFORM</h2>
+      <p>DNA-inspired · Forest Green + Mint · Geometric seat-block shapes</p>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="logo-grid">
+
+    <!-- S2 V1 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant A</span>
+      <div class="logo-display">
+        <div class="s2v1-wrap">
+          <div class="s2v1-e">
+            <div class="block e-vert"></div>
+            <div class="block e-top"></div>
+            <div class="block e-mid"></div>
+            <div class="block e-bot"></div>
+            <div class="block e-dot1"></div>
+            <div class="block e-dot2"></div>
+          </div>
+          <div class="s2v1-wordstack">
+            <div class="main">ES<span>KAT</span></div>
+            <div class="sub">EVENT SEATING TOOL</div>
+          </div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Block "E" lettermark</div>
+        <div class="name">Icon + Stack · Geometric</div>
+      </div>
+    </div>
+
+    <!-- S2 V2 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant B</span>
+      <div class="logo-display">
+        <div class="s2v2-wrap">
+          <!-- 5x5 seat grid forming an "E" pattern -->
+          <div class="seat-grid">
+            <div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div>
+            <div class="s on"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div>
+            <div class="s on"></div><div class="s md"></div><div class="s md"></div><div class="s hi"></div><div class="s"></div>
+            <div class="s on"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div>
+            <div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div>
+          </div>
+          <div class="s2v2-text">ES<span>KAT</span></div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Seat-map grid icon</div>
+        <div class="name">Grid Mark + Wordmark</div>
+      </div>
+    </div>
+
+    <!-- S2 V3 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant C</span>
+      <div class="logo-display">
+        <div class="s2v3-wrap">
+          <div class="s2v3-mark">
+            <div class="m a"></div><div class="m a"></div><div class="m a"></div>
+            <div class="m a"></div><div class="m c"></div><div class="m"></div>
+            <div class="m a"></div><div class="m b"></div><div class="m"></div>
+          </div>
+          <div class="s2v3-info">
+            <div class="logo-name">ES<span>KAT</span></div>
+            <div class="tagline-text">event seating · blueprint</div>
+          </div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Modular 3×3 mark</div>
+        <div class="name">DNA Style · Two-tone</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======================== STYLE 3 ======================== -->
+<div class="section style3">
+  <div class="section-label">
+    <span class="num">03</span>
+    <div class="info">
+      <h2>TYPOGRAPHIC WORDMARK</h2>
+      <p>Pixel-gap cuts · Futuristic gradient · Liquid glass aesthetic</p>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="logo-grid">
+
+    <!-- S3 V1 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant A</span>
+      <div class="logo-display">
+        <div class="s3v1-wrap">
+          <div class="s3v1-mark">ESKAT</div>
+          <div class="s3v1-divider">
+            <div class="line"></div>
+            <div class="dot"></div>
+            <div class="line"></div>
+          </div>
+          <div class="s3v1-sub">event seating · blueprint</div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Gradient wordmark</div>
+        <div class="name">Display Weight · Liquid Teal</div>
+      </div>
+    </div>
+
+    <!-- S3 V2 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant B</span>
+      <div class="logo-display">
+        <div class="s3v2-card">
+          <div class="s3v2-inner">
+            <div class="s3v2-word">
+              <span class="s3v2-es">ES</span><span class="s3v2-kat">KAT</span>
+            </div>
+            <div class="s3v2-badge">
+              <div class="s3v2-badge-dot"></div>
+              <span>EVENT SEATING</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Split-tone wordmark</div>
+        <div class="name">Glass Card · ES/KAT duality</div>
+      </div>
+    </div>
+
+    <!-- S3 V3 -->
+    <div class="logo-card">
+      <span class="variant-tag">Variant C</span>
+      <div class="logo-display">
+        <div class="s3v3-wrap">
+          <div class="s3v3-icon-row">
+            <div class="s3v3-seat"></div>
+            <div class="s3v3-seat dim"></div>
+            <div class="s3v3-seat"></div>
+            <div class="s3v3-seat dim"></div>
+            <div class="s3v3-seat"></div>
+          </div>
+          <div class="s3v3-wordmark">ESKAT</div>
+          <div class="s3v3-sub">
+            <span>EVENT</span>
+            <span class="accent">·</span>
+            <span>SEATING</span>
+            <span class="accent">·</span>
+            <span>TOOL</span>
+          </div>
+        </div>
+      </div>
+      <div class="logo-meta">
+        <div class="tagline">Monochrome + pixel dots</div>
+        <div class="name">Minimal · Seat-row accent</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <p>9 CONCEPTS · 3 STYLE DIRECTIONS · ALL ASSETS VECTORIZABLE</p>
+  <div class="brand">ESKAT · EVENT SEATING ARCHITECTURE TOOL</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="arc-a-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF983C" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#FFD0A0" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF983C" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="arc-a-2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF983C" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#FF983C" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FF983C" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="arc-a-3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF983C" stop-opacity="0.18"/>
+      <stop offset="50%" stop-color="#FF983C" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#FF983C" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+  <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="url(#arc-a-3)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="url(#arc-a-2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="url(#arc-a-1)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="80" cy="72" rx="9" ry="6" fill="#FF983C" opacity="0.2"/>
+  <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#FFD0A0" opacity="0.65"/>
+  <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+  <circle cx="18" cy="100" r="3.5" fill="#FF983C" opacity="0.5"/>
+  <circle cx="142" cy="100" r="3.5" fill="#FF983C" opacity="0.5"/>
+</svg>

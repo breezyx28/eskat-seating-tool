@@ -1,0 +1,27 @@
+<svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="arc-t-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#A8FFE8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="arc-t-2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.45"/>
+      <stop offset="50%" stop-color="#4ECDC4" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="arc-t-3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#4ECDC4" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  <path d="M 18 100 A 62 62 0 1 1 142 100" stroke="url(#arc-t-3)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M 32 100 A 48 48 0 1 1 128 100" stroke="url(#arc-t-2)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M 46 100 A 34 34 0 1 1 114 100" stroke="url(#arc-t-1)" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="80" cy="72" rx="9" ry="6" fill="#4ECDC4" opacity="0.25"/>
+  <ellipse cx="80" cy="72" rx="5" ry="3.5" fill="#A8FFE8" opacity="0.7"/>
+  <circle cx="80" cy="72" r="2.5" fill="#fff" opacity="0.9"/>
+  <circle cx="18" cy="100" r="3.5" fill="#4ECDC4" opacity="0.5"/>
+  <circle cx="142" cy="100" r="3.5" fill="#4ECDC4" opacity="0.5"/>
+</svg>

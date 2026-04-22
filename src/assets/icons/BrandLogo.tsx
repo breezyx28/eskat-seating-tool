@@ -1,0 +1,64 @@
+import type { CSSProperties } from 'react';
+
+interface BrandLogoProps {
+  size?: number;
+  className?: string;
+  style?: CSSProperties;
+  title?: string;
+}
+
+/**
+ * Triple-arc Eskat mark. Every stroke and fill uses `currentColor` so the
+ * parent controls the paint via CSS `color` — typically `var(--accent)` for
+ * the primary emerald brand color. The opacity tiers (outer faint → inner
+ * solid) provide visual depth without needing multiple hues.
+ *
+ * Source geometry: /public/assets/logos/eskat-arc-teal-solid.svg.
+ */
+export function BrandLogo({ size = 18, className, style, title }: BrandLogoProps) {
+  const height = (size * 150) / 160;
+  return (
+    <svg
+      width={size}
+      height={height}
+      viewBox="0 0 160 150"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={style}
+      role={title ? 'img' : undefined}
+      aria-hidden={title ? undefined : true}
+      aria-label={title}
+    >
+      {title ? <title>{title}</title> : null}
+      <path
+        d="M 18 100 A 62 62 0 1 1 142 100"
+        stroke="currentColor"
+        strokeOpacity={0.25}
+        strokeWidth={10}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 32 100 A 48 48 0 1 1 128 100"
+        stroke="currentColor"
+        strokeOpacity={0.55}
+        strokeWidth={10}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 46 100 A 34 34 0 1 1 114 100"
+        stroke="currentColor"
+        strokeWidth={10}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <ellipse cx={80} cy={72} rx={9} ry={6} fill="currentColor" opacity={0.15} />
+      <ellipse cx={80} cy={72} rx={5} ry={3.5} fill="currentColor" opacity={0.45} />
+      <circle cx={80} cy={72} r={2.5} fill="currentColor" opacity={0.95} />
+      <circle cx={18} cy={100} r={3.5} fill="currentColor" opacity={0.4} />
+      <circle cx={142} cy={100} r={3.5} fill="currentColor" opacity={0.4} />
+    </svg>
+  );
+}
