@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { DotGrid } from './DotGrid';
 
 export function PlaygroundCTA() {
   return (
@@ -16,21 +17,30 @@ export function PlaygroundCTA() {
             border: '1px solid var(--border)',
           }}
         >
-          {/* Dot-grid backdrop */}
+          {/* Interactive dot-grid backdrop */}
           <div
-            className="pointer-events-none absolute inset-0"
+            className="pointer-events-none absolute inset-0 overflow-hidden"
             style={{
-              backgroundImage:
-                'radial-gradient(circle, #2e2e2e 1px, transparent 1px)',
-              backgroundSize: '14px 14px',
-              opacity: 0.35,
-              maskImage:
-                'radial-gradient(ellipse 70% 100% at 50% 50%, rgba(0,0,0,0.9), transparent 75%)',
               WebkitMaskImage:
-                'radial-gradient(ellipse 70% 100% at 50% 50%, rgba(0,0,0,0.9), transparent 75%)',
+                'radial-gradient(ellipse 55% 65% at 50% 50%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,1) 75%)',
+              maskImage:
+                'radial-gradient(ellipse 55% 65% at 50% 50%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,1) 75%)',
             }}
             aria-hidden
-          />
+          >
+            <DotGrid
+              dotSize={4}
+              gap={22}
+              baseColor="#2e2e2e"
+              activeColor="#3ecf8e"
+              proximity={120}
+              shockRadius={250}
+              shockStrength={3}
+              resistance={750}
+              returnDuration={1.5}
+              style={{ opacity: 0.6 }}
+            />
+          </div>
 
           <div className="relative flex flex-col items-center gap-6 text-center">
             <span
