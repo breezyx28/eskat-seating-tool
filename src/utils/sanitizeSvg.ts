@@ -55,7 +55,12 @@ function stripDangerousSvgSubtree(root: Element): void {
         ''
       ).trim();
       const low = href.toLowerCase();
-      if (!href || low.startsWith('javascript:') || (!low.startsWith('#') && !low.startsWith('data:'))) {
+      if (
+        !href ||
+        low.startsWith('javascript:') ||
+        low.startsWith('vbscript:') ||
+        (!low.startsWith('#') && !low.startsWith('data:'))
+      ) {
         el.remove();
         continue;
       }
