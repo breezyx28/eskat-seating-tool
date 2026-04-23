@@ -64,7 +64,10 @@ function stripDangerousSvgSubtree(root: Element): void {
       const name = attr.name.toLowerCase();
       const value = attr.value.trim().toLowerCase();
       if (name.startsWith('on')) el.removeAttribute(attr.name);
-      else if ((name === 'href' || name === 'xlink:href') && value.startsWith('javascript:')) {
+      else if (
+        (name === 'href' || name === 'xlink:href') &&
+        (value.startsWith('javascript:') || value.startsWith('vbscript:'))
+      ) {
         el.removeAttribute(attr.name);
       } else if ((name === 'href' || name === 'xlink:href') && !value.startsWith('#') && !value.startsWith('data:')) {
         el.removeAttribute(attr.name);
