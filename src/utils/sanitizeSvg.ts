@@ -14,6 +14,19 @@
 
 const DANGEROUS_TAGS = 'script, foreignObject, animate, set, animateMotion, animateTransform';
 
+function containsDisallowedMarkup(raw: string): boolean {
+  // Reject constructs we never need for seat icons and that can create parser/XSS ambiguity.
+  return /<!DOCTYPE|<!ENTITY|<\?|<\/?(html|head|body|iframe|object|embed|meta|link)\b/i.test(raw);
+}
+
+function escapeXmlAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 function stripDangerousSvgSubtree(root: Element): void {
   root.querySelectorAll(DANGEROUS_TAGS).forEach((n) => n.remove());
 
@@ -57,6 +70,7 @@ function stripDangerousSvgSubtree(root: Element): void {
 
 export function sanitizeSvg(raw: string): string {
   if (!raw) return '';
+  if (containsDisallowedMarkup(raw)) return '';
   const parser = new DOMParser();
   const doc = parser.parseFromString(raw, 'image/svg+xml');
   const parseError = doc.querySelector('parsererror');
@@ -85,6 +99,7 @@ export function sanitizeSvg(raw: string): string {
 export function sanitizeSvgFragment(raw: string): string {
   const trimmed = raw.trim();
   if (!trimmed) return '';
+  if (containsDisallowedMarkup(trimmed)) return '';
   const wrapped = `<svg xmlns="http://www.w3.org/2000/svg">${trimmed}</svg>`;
   const parser = new DOMParser();
   const doc = parser.parseFromString(wrapped, 'image/svg+xml');
@@ -108,5 +123,6 @@ export function dataUrlToSvg(dataUrl: string, size = 24): string {
   if (!d.startsWith('data:image/')) {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}"/>`;
   }
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" preserveAspectRatio="xMidYMid meet"><image href="${d}" x="0" y="0" width="${size}" height="${size}" /></svg>`;
+  const safeHref = escapeXmlAttr(d);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" preserveAspectRatio="xMidYMid meet"><image href="${safeHref}" x="0" y="0" width="${size}" height="${size}" /></svg>`;
 }
