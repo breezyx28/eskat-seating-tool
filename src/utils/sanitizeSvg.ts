@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 /**
  * Best-effort sanitiser for user-provided SVG markup that will be inlined via
  * `dangerouslySetInnerHTML`. Drops <script> elements, any `on*` event handlers,
@@ -13,6 +15,14 @@
  */
 
 const DANGEROUS_TAGS = 'script, foreignObject, animate, set, animateMotion, animateTransform';
+
+function sanitizeSvgMarkup(raw: string): string {
+  return DOMPurify.sanitize(raw, {
+    USE_PROFILES: { svg: true, svgFilters: true, html: false },
+    FORBID_TAGS: ['script', 'foreignObject', 'animate', 'set', 'animateMotion', 'animateTransform'],
+    FORBID_ATTR: ['style'],
+  });
+}
 
 function containsDisallowedMarkup(raw: string): boolean {
   // Reject constructs we never need for seat icons and that can create parser/XSS ambiguity.
@@ -71,8 +81,10 @@ function stripDangerousSvgSubtree(root: Element): void {
 export function sanitizeSvg(raw: string): string {
   if (!raw) return '';
   if (containsDisallowedMarkup(raw)) return '';
+  const safeRaw = sanitizeSvgMarkup(raw);
+  if (!safeRaw) return '';
   const parser = new DOMParser();
-  const doc = parser.parseFromString(raw, 'image/svg+xml');
+  const doc = parser.parseFromString(safeRaw, 'image/svg+xml');
   const parseError = doc.querySelector('parsererror');
   if (parseError) return '';
   const svg = doc.querySelector('svg');
@@ -100,7 +112,9 @@ export function sanitizeSvgFragment(raw: string): string {
   const trimmed = raw.trim();
   if (!trimmed) return '';
   if (containsDisallowedMarkup(trimmed)) return '';
-  const wrapped = `<svg xmlns="http://www.w3.org/2000/svg">${trimmed}</svg>`;
+  const safeFragment = sanitizeSvgMarkup(trimmed);
+  if (!safeFragment) return '';
+  const wrapped = `<svg xmlns="http://www.w3.org/2000/svg">${safeFragment}</svg>`;
   const parser = new DOMParser();
   const doc = parser.parseFromString(wrapped, 'image/svg+xml');
   if (doc.querySelector('parsererror')) return '';
