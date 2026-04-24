@@ -19,6 +19,8 @@ import {
   configFromVenueData,
   downloadConfig,
 } from '@/utils/configTemplate';
+import { highlightTsx } from '@/utils/highlightTsx';
+import { cn } from '@/lib/utils';
 import { Copy, DownloadSimple, Code, Info, Gear, Package } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
@@ -70,8 +72,15 @@ export function ExportComponentDialog({ open, onClose }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-4xl">
-        <DialogHeader>
+      <DialogContent
+        className={cn(
+          'max-w-4xl w-[min(100vw-2rem,56rem)]',
+          'max-h-[calc(100dvh-2rem)]',
+          'p-0 overflow-hidden',
+          'flex flex-col gap-0'
+        )}
+      >
+        <DialogHeader className="px-6 pt-6 pb-3">
           <DialogTitle className="flex items-center gap-2">
             <Code size={18} weight="bold" style={{ color: 'var(--accent)' }} />
             Export as React Component
@@ -82,6 +91,7 @@ export function ExportComponentDialog({ open, onClose }: Props) {
           </DialogDescription>
         </DialogHeader>
 
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-4 space-y-4">
         <div className="flex flex-wrap items-end gap-2">
           <div className="space-y-1.5 flex-1 min-w-[200px]">
             <Label>Component name</Label>
@@ -119,16 +129,16 @@ export function ExportComponentDialog({ open, onClose }: Props) {
             <TabsTrigger value="config">venue.config.ts</TabsTrigger>
             <TabsTrigger value="usage">Usage</TabsTrigger>
           </TabsList>
-          <TabsContent value="preview">
+          <TabsContent value="preview" className="min-w-0">
             <ScrollArea
-              className="h-[360px] rounded-md"
+              className="h-[360px] w-full rounded-md"
               style={{ border: '1px solid var(--border)', background: 'var(--bg-app)' }}
             >
               <pre
-                className="p-4 text-[11px] leading-relaxed font-mono overflow-x-auto"
-                style={{ color: 'var(--text-secondary)' }}
+                className="p-4 text-[11px] leading-[1.7] font-mono whitespace-pre min-w-max"
+                style={{ tabSize: 2 }}
               >
-                {source}
+                <code>{highlightTsx(source)}</code>
               </pre>
             </ScrollArea>
             <div
@@ -146,16 +156,16 @@ export function ExportComponentDialog({ open, onClose }: Props) {
               </span>
             </div>
           </TabsContent>
-          <TabsContent value="config">
+          <TabsContent value="config" className="min-w-0">
             <ScrollArea
-              className="h-[360px] rounded-md"
+              className="h-[360px] w-full rounded-md"
               style={{ border: '1px solid var(--border)', background: 'var(--bg-app)' }}
             >
               <pre
-                className="p-4 text-[11px] leading-relaxed font-mono overflow-x-auto"
-                style={{ color: 'var(--text-secondary)' }}
+                className="p-4 text-[11px] leading-[1.7] font-mono whitespace-pre min-w-max"
+                style={{ tabSize: 2 }}
               >
-                {configSource}
+                <code>{highlightTsx(configSource)}</code>
               </pre>
             </ScrollArea>
             <div
@@ -198,13 +208,16 @@ export function ExportComponentDialog({ open, onClose }: Props) {
                 </p>
               </div>
               <pre
-                className="p-3 rounded-sm text-[11.5px] font-mono overflow-x-auto"
+                className="p-3 rounded-sm text-[11.5px] leading-[1.7] font-mono whitespace-pre overflow-x-auto"
                 style={{
                   background: 'var(--bg-app)',
                   border: '1px solid var(--border)',
-                  color: 'var(--text-primary)',
+                  tabSize: 2,
                 }}
-              >{`import ${sanitizeName(componentName)} from './${sanitizeName(componentName)}';
+              >
+                <code>
+                  {highlightTsx(
+                    `import ${sanitizeName(componentName)} from './${sanitizeName(componentName)}';
 
 export default function App() {
   return (
@@ -219,7 +232,10 @@ export default function App() {
       />
     </div>
   );
-}`}</pre>
+}`
+                  )}
+                </code>
+              </pre>
               <div>
                 <div
                   className="mono-label mb-2"
@@ -251,8 +267,9 @@ export default function App() {
             </div>
           </TabsContent>
         </Tabs>
+        </div>
 
-        <DialogFooter>
+        <DialogFooter className="border-t border-[var(--border)] px-6 py-4">
           <Button variant="secondary" onClick={onClose}>
             Close
           </Button>

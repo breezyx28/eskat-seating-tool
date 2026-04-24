@@ -36,13 +36,38 @@ export function CanvasViewport({
   const activeTool = useCanvasStore((s) => s.activeTool);
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
   const [panning, setPanning] = useState(false);
+  const [minScale, setMinScale] = useState(0.1);
 
   const contentRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setTransformRef(transformRef.current);
     return () => setTransformRef(null);
   }, []);
+
+  // Clamp zoom-out to ~fit-to-viewport (90% headroom). Recomputes on
+  // container resize and when the venue dimensions change.
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const compute = () => {
+      const cw = el.clientWidth;
+      const ch = el.clientHeight;
+      const vw = venueData.venue.width;
+      const vh = venueData.venue.height;
+      if (!cw || !ch || !vw || !vh) return;
+      const fit = Math.min(cw / vw, ch / vh);
+      setMinScale(Math.max(0.05, fit * 0.9));
+    };
+
+    compute();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(compute);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [venueData.venue.width, venueData.venue.height]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -60,6 +85,7 @@ export function CanvasViewport({
 
   return (
     <div
+      ref={wrapperRef}
       className="flex-1 relative overflow-hidden"
       style={{ background: 'var(--bg-canvas)' }}
       onMouseMove={handleMouseMove}
@@ -110,7 +136,7 @@ export function CanvasViewport({
           setTransformRef(ref);
         }}
         initialScale={1}
-        minScale={0.1}
+        minScale={minScale}
         maxScale={5}
         panning={{
           activationKeys: [' '],

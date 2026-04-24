@@ -210,6 +210,22 @@ export default function Playground() {
 
   const handleNudge = useCallback(
     (dx: number, dy: number) => {
+      const { selectedIds, canvasLocked } = useCanvasStore.getState();
+      if (selectedIds.length === 0) {
+        // Pan the viewport instead when nothing is selected.
+        if (canvasLocked) return;
+        const ref = getTransformRef();
+        if (!ref) return;
+        const PAN_STEP = 40;
+        const { positionX, positionY, scale } = ref.state;
+        ref.setTransform(
+          positionX - dx * PAN_STEP,
+          positionY - dy * PAN_STEP,
+          scale,
+          0
+        );
+        return;
+      }
       nudgeSelection(dx, dy);
     },
     [nudgeSelection]

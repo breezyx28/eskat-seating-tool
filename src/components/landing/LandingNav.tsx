@@ -4,10 +4,15 @@ import { Button } from '@/components/ui/button';
 import { BrandLogo } from '@/assets/icons/BrandLogo';
 import { README_ANCHORS } from '@/lib/repoLinks';
 
-const LINKS: { label: string; href: string }[] = [
-  { label: 'Features', href: '#features' },
-  { label: 'Templates', href: '#templates' },
-  { label: 'Export', href: '#export' },
+type NavLink =
+  | { kind: 'anchor'; label: string; href: string }
+  | { kind: 'route'; label: string; to: string };
+
+const LINKS: NavLink[] = [
+  { kind: 'anchor', label: 'Features', href: '#features' },
+  { kind: 'anchor', label: 'Templates', href: '#templates' },
+  { kind: 'route', label: 'Studio', to: '/templates' },
+  { kind: 'anchor', label: 'Export', href: '#export' },
 ];
 
 export function LandingNav() {
@@ -36,22 +41,33 @@ export function LandingNav() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-sm px-3 py-1.5 text-[13px] transition-colors duration-base focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              style={{ color: 'var(--text-secondary)' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
+          {LINKS.map((link) => {
+            const common = {
+              className:
+                'rounded-sm px-3 py-1.5 text-[13px] transition-colors duration-base focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+              style: { color: 'var(--text-secondary)' },
+              onMouseEnter: (e: React.MouseEvent<HTMLElement>) => {
+                (e.currentTarget as HTMLElement).style.color =
+                  'var(--text-primary)';
+              },
+              onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
+                (e.currentTarget as HTMLElement).style.color =
+                  'var(--text-secondary)';
+              },
+            };
+            if (link.kind === 'route') {
+              return (
+                <Link key={link.to} to={link.to} {...common}>
+                  {link.label}
+                </Link>
+              );
+            }
+            return (
+              <a key={link.href} href={link.href} {...common}>
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">

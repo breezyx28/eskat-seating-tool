@@ -144,6 +144,8 @@ Eskat is a browser-based design tool that treats a venue like a vector editor tr
 
 ## Live Demo — Landing Page
 
+Production domain: [eskat.kat-jr.com](https://eskat.kat-jr.com)
+
 The landing page ships an interactive "shadcn-style" code window showcasing every bundled template as a realistic end-user seat-picker. It is the exact same component your clients would embed on a checkout page — just rendered at runtime with seeded random states so every section feels populated.
 
 <p align="center">

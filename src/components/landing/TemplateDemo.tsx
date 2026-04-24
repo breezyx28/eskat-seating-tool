@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Layout, Plus, ArrowRight } from '@phosphor-icons/react';
 import type { VenueData } from '@/types';
 import { exportAsReactComponent } from '@/utils/exportComponent';
+import { Button } from '@/components/ui/button';
 import { TEMPLATE_SHOWCASE } from '@/components/previews/TemplatePreviews';
 import { TemplateDemoPreview, type DemoSeatShape } from './TemplateDemoPreview';
 import { CodePane } from './CodePane';
@@ -144,6 +147,21 @@ export function TemplateDemo() {
             ticket buyer would, switch templates, and grab the component source
             — zero tweaks required.
           </p>
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            <Button asChild variant="brand">
+              <Link to="/templates">
+                <Layout size={14} weight="bold" />
+                Pick a template &amp; go
+                <ArrowRight size={13} weight="bold" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/playground">
+                <Plus size={14} weight="bold" />
+                Start from scratch
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Template picker — horizontal scroll on narrow screens; wrap on md+ */}

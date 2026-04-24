@@ -1,5 +1,5 @@
 import { Check } from '@phosphor-icons/react';
-import { Fragment } from 'react';
+import { highlightTsx } from '@/utils/highlightTsx';
 
 const BULLETS = [
   'Nested drill-in sections',
@@ -27,63 +27,6 @@ export default function App() {
     </div>
   );
 }`;
-
-const KEYWORDS = new Set([
-  'import',
-  'from',
-  'export',
-  'default',
-  'function',
-  'return',
-  'const',
-]);
-
-const PUNCTUATION = new Set(['{', '}', '(', ')', '[', ']', '<', '>', '/', '=', '.', ',', ';']);
-
-function renderHighlightedCode(code: string) {
-  const lines = code.split('\n');
-
-  return lines.map((line, lineIndex) => {
-    const trimmed = line.trimStart();
-    const indent = line.slice(0, line.length - trimmed.length);
-
-    // Whole-line comment in the demo snippet.
-    if (trimmed.startsWith('//')) {
-      return (
-        <Fragment key={`line-${lineIndex}`}>
-          {indent}
-          <span style={{ color: '#6a9955' }}>{trimmed}</span>
-          {lineIndex < lines.length - 1 ? '\n' : ''}
-        </Fragment>
-      );
-    }
-
-    const parts = trimmed.split(/(\s+|[{}()[\]<>/=.,;])/g).filter(Boolean);
-
-    return (
-      <Fragment key={`line-${lineIndex}`}>
-        {indent}
-        {parts.map((part, partIndex) => {
-          let color = 'var(--text-primary)';
-
-          if (/^['"`].*['"`]$/.test(part)) color = '#ce9178'; // strings
-          else if (KEYWORDS.has(part)) color = '#c586c0'; // keywords
-          else if (PUNCTUATION.has(part)) color = '#d4d4d4'; // punctuation
-          else if (/^[A-Z][A-Za-z0-9_]*$/.test(part)) color = '#4fc1ff'; // components/types
-          else if (/^[a-z][A-Za-z0-9_]*$/.test(part)) color = '#9cdcfe'; // identifiers/props
-          else if (/^\d+$/.test(part)) color = '#b5cea8'; // numbers
-
-          return (
-            <span key={`part-${lineIndex}-${partIndex}`} style={{ color }}>
-              {part}
-            </span>
-          );
-        })}
-        {lineIndex < lines.length - 1 ? '\n' : ''}
-      </Fragment>
-    );
-  });
-}
 
 export function ExportCallout() {
   return (
@@ -176,7 +119,7 @@ export function ExportCallout() {
               tabSize: 2,
             }}
           >
-            <code>{renderHighlightedCode(USAGE_CODE)}</code>
+            <code>{highlightTsx(USAGE_CODE)}</code>
           </pre>
         </div>
       </div>

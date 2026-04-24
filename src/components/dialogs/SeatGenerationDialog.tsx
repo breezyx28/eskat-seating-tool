@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
@@ -185,8 +186,15 @@ export function SeatGenerationDialog({ open, sectionId, onClose }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
+      <DialogContent
+        className={cn(
+          'max-w-3xl w-[min(100vw-2rem,48rem)]',
+          'max-h-[calc(100dvh-2rem)]',
+          'p-0 overflow-hidden',
+          'flex flex-col gap-0'
+        )}
+      >
+        <DialogHeader className="px-6 pt-6 pb-3">
           <DialogTitle>Generate seats</DialogTitle>
           <DialogDescription>
             {section
@@ -195,7 +203,8 @@ export function SeatGenerationDialog({ open, sectionId, onClose }: Props) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-[1fr_340px] gap-6">
+        <div className="min-h-0 flex-1 overflow-y-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_340px] gap-6 pb-4">
           <div className="space-y-4">
             <Group heading="Grid">
               <div className="grid grid-cols-2 gap-3">
@@ -351,9 +360,10 @@ export function SeatGenerationDialog({ open, sectionId, onClose }: Props) {
               )}
             </dl>
           </aside>
+          </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="border-t border-[var(--border)] px-6 py-4">
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
